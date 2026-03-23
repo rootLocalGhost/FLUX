@@ -13,5 +13,10 @@ venv/
 .vscode/
 .idea/
 
+# Generations
+*.png
+*.jpg
+*.jpeg
+
 # Ignore the massive model weights (These go to Hugging Face, not Git)
 model/
