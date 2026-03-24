@@ -1,0 +1,8 @@
+{
+  "prompt": "A dreamy impressionist portrait of a woman in a flowing gown under sakura blossoms, pastel palette, painterly brushstrokes",
+  "width": 1024,
+  "height": 1024,
+  "seed": 1510693563,
+  "device": "xpu",
+  "dtype": "torch.bfloat16"
+}

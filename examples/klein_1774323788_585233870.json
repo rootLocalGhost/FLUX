@@ -1,0 +1,8 @@
+{
+  "prompt": "A modern digital painting of a female dancer mid-twirl with vibrant painterly motion blur and expressive color harmony",
+  "width": 1024,
+  "height": 1024,
+  "seed": 585233870,
+  "device": "xpu",
+  "dtype": "torch.bfloat16"
+}

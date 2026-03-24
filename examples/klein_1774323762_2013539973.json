@@ -1,0 +1,8 @@
+{
+  "prompt": "A surrealist painting of a woman in a mirrored room with floating rose petals and painterly textures",
+  "width": 1024,
+  "height": 1024,
+  "seed": 2013539973,
+  "device": "xpu",
+  "dtype": "torch.bfloat16"
+}
