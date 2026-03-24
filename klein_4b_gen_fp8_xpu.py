@@ -21,7 +21,7 @@ from klein.sampling import get_schedule, denoise, batched_prc_txt, batched_prc_i
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_DIR = os.path.join(SCRIPT_DIR, "model", "FLUX.2-klein-4B")
 
-TRANSFORMER_PATH = os.path.join(MODEL_DIR, "flux-2-klein-4b-fp8.safetensors")
+TRANSFORMER_PATH = os.path.join(MODEL_DIR, "transformer_quantized", "flux-2-klein-4b-fp8.safetensors")
 VAE_PATH = os.path.join(MODEL_DIR, "autoencoder", "ae.safetensors")
 TEXT_ENCODER_DIR = os.path.join(MODEL_DIR, "text_encoder")
 TOKENIZER_DIR = os.path.join(MODEL_DIR, "tokenizer")
@@ -48,12 +48,22 @@ class LocalQwen3Embedder(nn.Module):
     def __init__(self, device="cpu"):
         super().__init__()
         print(f"   -> Loading Qwen3 from: {TEXT_ENCODER_DIR}")
+        if not os.path.isdir(TEXT_ENCODER_DIR) or not os.path.isdir(TOKENIZER_DIR):
+            print("\n>> Local text encoder/tokenizer folder missing. Downloading from rootlocalghost/FLUX.2-klein-4B...")
+            from huggingface_hub import snapshot_download
+            snapshot_download(
+                repo_id="rootlocalghost/FLUX.2-klein-4B",
+                local_dir=MODEL_DIR,
+                local_dir_use_symlinks=False,
+            )
+
         self.model = AutoModelForCausalLM.from_pretrained(
             TEXT_ENCODER_DIR,
             torch_dtype=torch.bfloat16,
             device_map=device,
+            local_files_only=True,
         )
-        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DIR)
+        self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DIR, local_files_only=True)
         self.max_length = 512
 
     @torch.no_grad()
