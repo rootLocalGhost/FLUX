@@ -1,6 +1,7 @@
 import os
 import time
 import gc
+import json
 import torch
 import numpy as np
 import torch.nn as nn
@@ -43,8 +44,7 @@ if not os.path.exists(TRANSFORMER_PATH):
 else:
     print("\n>> Local model weights found! Skipping download check.")
 
-# The RED crystal image we generated in the editing step
-INPUT_IMAGE_PATH = os.path.join(SCRIPT_DIR, "edited_klein_4b_xpu.jpg")
+INPUT_IMAGE_PATH = os.path.join(SCRIPT_DIR, "input", "ref", "ref1.png")
 
 
 # ==========================================
@@ -226,11 +226,26 @@ def generate_from_reference(prompt: str, image_path: str, seed: int = 42, num_st
     decoded = decoded.cpu().permute(0, 2, 3, 1).float().numpy()
 
     image = Image.fromarray((decoded[0] * 255).astype(np.uint8))
-    output_dir = os.path.join(SCRIPT_DIR, 'output')
+    output_dir = os.path.join(SCRIPT_DIR, 'output/refgen')
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, f"refgen_{int(time.time())}_{seed}.png")
     image.save(output_path)
+
+    metadata = {
+        'prompt': prompt,
+        'width': new_w,
+        'height': new_h,
+        'seed': seed,
+        'device': device,
+        'dtype': str(dtype),
+        'num_steps': num_steps,
+    }
+    metadata_path = os.path.splitext(output_path)[0] + '.json'
+    with open(metadata_path, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=2)
+
     print(f"\n>> Success! RefGen image saved to: {output_path}")
+    print(f">> Metadata saved to: {metadata_path}")
 
 
 def ask_num_steps():
@@ -329,15 +344,3 @@ def run_flow():
 
 if __name__ == "__main__":
     run_flow()
-    if not os.path.exists(TRANSFORMER_PATH):
-        print(f"ERROR: Cannot find Transformer at {TRANSFORMER_PATH}")
-        exit(1)
-
-    if not os.path.exists(INPUT_IMAGE_PATH):
-        print(f"ERROR: Cannot find the reference image at {INPUT_IMAGE_PATH}")
-        print("Make sure you run klein_4b_edit_xpu.py first to generate it!")
-        exit(1)
-
-    # Let's evolve the image further based on the red crystal!
-    refgen_prompt = "A highly detailed macro photography shot of a glowing RED crystal in a dark cave, surrounded by glowing magical floating runes, cinematic lighting, 8k resolution"
-    generate_from_reference(refgen_prompt, image_path=INPUT_IMAGE_PATH)
