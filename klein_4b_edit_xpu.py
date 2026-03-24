@@ -9,9 +9,9 @@ from safetensors.torch import load_file as load_sft
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Import the core math and architecture components
-from flux2.model import Flux2, Klein4BParams
-from flux2.autoencoder import AutoEncoder, AutoEncoderParams
-from flux2.sampling import (
+from klein.model import Flux2, Klein4BParams
+from klein.autoencoder import AutoEncoder, AutoEncoderParams
+from klein.sampling import (
     get_schedule,
     denoise,
     batched_prc_txt,
