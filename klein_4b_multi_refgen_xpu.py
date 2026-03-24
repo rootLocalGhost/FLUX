@@ -1,6 +1,7 @@
 import os
 import time
 import gc
+import json
 import torch
 import numpy as np
 import torch.nn as nn
@@ -43,9 +44,8 @@ if not os.path.exists(TRANSFORMER_PATH):
 else:
     print("\n>> Local model weights found! Skipping download check.")
 
-# The two images we generated in the previous steps
-INPUT_IMAGE_1_PATH = os.path.join(SCRIPT_DIR, "output_klein_4b_xpu.jpg")  # Blue crystal
-INPUT_IMAGE_2_PATH = os.path.join(SCRIPT_DIR, "edited_klein_4b_xpu.jpg")  # Red crystal
+INPUT_IMAGE_1_PATH = os.path.join(SCRIPT_DIR, "input", "ref", "ref1.png")
+INPUT_IMAGE_2_PATH = os.path.join(SCRIPT_DIR, "input", "ref", "ref2.png")
 
 
 # ==========================================
@@ -232,11 +232,26 @@ def generate_from_multiple_references(
     decoded = decoded.cpu().permute(0, 2, 3, 1).float().numpy()
 
     image = Image.fromarray((decoded[0] * 255).astype(np.uint8))
-    output_dir = os.path.join(SCRIPT_DIR, 'output')
+    output_dir = os.path.join(SCRIPT_DIR, 'output/multi_refgen')
     os.makedirs(output_dir, exist_ok=True)
     output_path = os.path.join(output_dir, f"multi_refgen_{int(time.time())}_{seed}.png")
     image.save(output_path)
+
+    metadata = {
+        'prompt': prompt,
+        'width': new_w,
+        'height': new_h,
+        'seed': seed,
+        'device': device,
+        'dtype': str(dtype),
+        'num_steps': num_steps,
+    }
+    metadata_path = os.path.splitext(output_path)[0] + '.json'
+    with open(metadata_path, 'w', encoding='utf-8') as f:
+        json.dump(metadata, f, indent=2)
+
     print(f"\n>> Success! MultiRefGen image saved to: {output_path}")
+    print(f">> Metadata saved to: {metadata_path}")
 
 
 def ask_num_steps():
