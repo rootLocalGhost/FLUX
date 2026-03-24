@@ -19,3 +19,6 @@ output/
 # Ignore the massive model weights and loras (These go to Hugging Face, not Git)
 model/
 loras/
+
+# Ignore prompt changes for now
+prompts/
