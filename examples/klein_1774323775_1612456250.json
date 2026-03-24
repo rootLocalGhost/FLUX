@@ -1,8 +1,0 @@
-{
-  "prompt": "A classical oil-style portrait of an elegant woman holding a lantern, rich chiaroscuro, museum-quality detail",
-  "width": 1024,
-  "height": 1024,
-  "seed": 1612456250,
-  "device": "xpu",
-  "dtype": "torch.bfloat16"
-}

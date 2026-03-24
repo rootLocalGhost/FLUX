@@ -1,8 +1,0 @@
-{
-  "prompt": "A bold Art Nouveau depiction of a goddess with luminous hair and organic floral patterns, soft gold accents",
-  "width": 1024,
-  "height": 1024,
-  "seed": 2004645911,
-  "device": "xpu",
-  "dtype": "torch.bfloat16"
-}
