@@ -26,7 +26,7 @@ from klein.sampling import (
 # 1. AUTOMATIC PATH RESOLUTION & DOWNLOAD
 # ==========================================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(SCRIPT_DIR, "model", "FLUX.2-klein-4B")
+MODEL_DIR = os.path.join(SCRIPT_DIR, "model", "FLUX.2-klein-4B-FP16")
 
 TRANSFORMER_PATH = os.path.join(MODEL_DIR, "transformer_merged", "flux-2-klein-4b.safetensors")
 VAE_PATH = os.path.join(MODEL_DIR, "autoencoder", "ae.safetensors")
@@ -36,9 +36,9 @@ TOKENIZER_DIR = os.path.join(MODEL_DIR, "tokenizer")
 # Only ping Hugging Face if the main model file is completely missing
 if not os.path.exists(TRANSFORMER_PATH):
     print("\n>> Model weights not found locally. Downloading from Hugging Face...")
-    print(f">> Syncing with repository: rootlocalghost/FLUX.2-klein-4B")
+    print(f">> Syncing with repository: rootlocalghost/FLUX.2-klein-4B-FP16")
     snapshot_download(
-        repo_id="rootlocalghost/FLUX.2-klein-4B",
+        repo_id="rootlocalghost/FLUX.2-klein-4B-FP16",
         local_dir=MODEL_DIR,
         local_dir_use_symlinks=False,  # Forces real files instead of weird Windows cache shortcuts
     )
@@ -64,10 +64,10 @@ class LocalQwen3Embedder(nn.Module):
             )
             self.tokenizer = AutoTokenizer.from_pretrained(TOKENIZER_DIR, local_files_only=True)
         except OSError:
-            print("\n>> Local text encoder not found. Downloading from rootlocalghost/FLUX.2-klein-4B...")
+            print("\n>> Local text encoder not found. Downloading from rootlocalghost/FLUX.2-klein-4B-FP16...")
             from huggingface_hub import snapshot_download
             snapshot_download(
-                repo_id="rootlocalghost/FLUX.2-klein-4B",
+                repo_id="rootlocalghost/FLUX.2-klein-4B-FP16",
                 local_dir=MODEL_DIR,
                 local_dir_use_symlinks=False,
             )

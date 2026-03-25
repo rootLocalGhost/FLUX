@@ -12,7 +12,7 @@ This massive model usually eats VRAM for breakfast. 🥞 To keep it under a stri
 2. Load Transformer ➡️ Denoise Image ➡️ **NUKE VRAM!** 💥
 3. Load Autoencoder ➡️ Decode to Pixels ➡️ **DONE!** 🎉
 
-No IPEX headaches. Just pure, native PyTorch XPU goodness. 💙 *(Plus, the scripts will automatically download the weights from `rootlocalghost/FLUX.2-klein-4B` on your first run! ☁️)*
+No IPEX headaches. Just pure, native PyTorch XPU goodness. 💙 *(Plus, the scripts will automatically download the weights from `rootlocalghost/FLUX.2-klein-4B-FP16` on your first run! ☁️)*
 
 ## 🛠️ Installation
 

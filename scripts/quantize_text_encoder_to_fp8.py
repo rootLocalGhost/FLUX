@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Quantize FLUX.2 text encoder checkpoint to FP8 in place-friendly paths.
 
-Will read from: model/FLUX.2-klein-4B/text_encoder/text-encoder-merged.safetensors (or shards with index)
-Write to: model/FLUX.2-klein-4B/text_encoder_quantized/text-encoder-fp8.safetensors
+Will read from: model/FLUX.2-klein-4B-FP16/text_encoder/text-encoder-merged.safetensors (or shards with index)
+Write to: model/FLUX.2-klein-4B-FP16/text_encoder_quantized/text-encoder-fp8.safetensors
 
     python quantize_text_encoder_fp8.py
 """
@@ -18,7 +18,7 @@ from safetensors.torch import load_file, save_file
 
 BASE_DIR = Path(__file__).resolve().parent
 ROOT_DIR = BASE_DIR.parent
-MODEL_DIR = ROOT_DIR / "model" / "FLUX.2-klein-4B"
+MODEL_DIR = ROOT_DIR / "model" / "FLUX.2-klein-4B-FP16"
 TEXT_ENCODER_DIR = MODEL_DIR / "text_encoder"
 TEXT_ENCODER_MERGED_DIR = MODEL_DIR / "text_encoder_merged"
 TEXT_ENCODER_QUANT_DIR = MODEL_DIR / "text_encoder_quantized"
